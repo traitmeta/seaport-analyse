@@ -6,127 +6,6 @@
 
 ```JSON
 {
- "types": {
-  "EIP712Domain": [
-   {
-    "name": "name",
-    "type": "string"
-   },
-   {
-    "name": "version",
-    "type": "string"
-   },
-   {
-    "name": "chainId",
-    "type": "uint256"
-   },
-   {
-    "name": "verifyingContract",
-    "type": "address"
-   }
-  ],
-  "OrderComponents": [
-   {
-    "name": "offerer",
-    "type": "address"
-   },
-   {
-    "name": "zone",
-    "type": "address"
-   },
-   {
-    "name": "offer",
-    "type": "OfferItem[]"
-   },
-   {
-    "name": "consideration",
-    "type": "ConsiderationItem[]"
-   },
-   {
-    "name": "orderType",
-    "type": "uint8"
-   },
-   {
-    "name": "startTime",
-    "type": "uint256"
-   },
-   {
-    "name": "endTime",
-    "type": "uint256"
-   },
-   {
-    "name": "zoneHash",
-    "type": "bytes32"
-   },
-   {
-    "name": "salt",
-    "type": "uint256"
-   },
-   {
-    "name": "conduitKey",
-    "type": "bytes32"
-   },
-   {
-    "name": "counter",
-    "type": "uint256"
-   }
-  ],
-  "OfferItem": [
-   {
-    "name": "itemType",
-    "type": "uint8"
-   },
-   {
-    "name": "token",
-    "type": "address"
-   },
-   {
-    "name": "identifierOrCriteria",
-    "type": "uint256"
-   },
-   {
-    "name": "startAmount",
-    "type": "uint256"
-   },
-   {
-    "name": "endAmount",
-    "type": "uint256"
-   }
-  ],
-  "ConsiderationItem": [
-   {
-    "name": "itemType",
-    "type": "uint8"
-   },
-   {
-    "name": "token",
-    "type": "address"
-   },
-   {
-    "name": "identifierOrCriteria",
-    "type": "uint256"
-   },
-   {
-    "name": "startAmount",
-    "type": "uint256"
-   },
-   {
-    "name": "endAmount",
-    "type": "uint256"
-   },
-   {
-    "name": "recipient",
-    "type": "address"
-   }
-  ]
- },
- "primaryType": "OrderComponents",
- "domain": {
-  "name": "Seaport",
-  "version": "1.5",
-  "chainId": "5",
-  "verifyingContract": "0x00000000000000ADc04C56Bf30aC9d3c0aAF14dC"
- },
  "message": {
   "offerer": "0x560D5cdC0CdcA5496606Ed40EB6a9F886B768960",
   "offer": [
@@ -176,14 +55,14 @@
 
 ## 用户购买 NFT 的时候调用的合约方法
 
-1. 使用 fulfillBasicOrder_efficient_6GL6yc/fulfillBasicOrder都可以完成交易，efficient更节省gas
+1. 使用 fulfillBasicOrder_efficient_6GL6yc/fulfillBasicOrder 都可以完成交易，efficient 更节省 gas
 2. 参数是上面的挂单信息进行转变而来；
-    - consideration开头的是上面ConsiderationItem的第一个Item的信息
-    - additionalRecipients 是ConsiderationItem排除第一个Item之后剩余的信息
-    - offer开头的是上面offerItem的信息
-    - basicOrderType是需要转换的，[可以参考](https://github.com/cryptochou/seaport-analysis)
-    - 签名是上面挂单用户的签名
-    - 其他信息可以照搬下来
+   - consideration 开头的是上面 ConsiderationItem 的第一个 Item 的信息
+   - additionalRecipients 是 ConsiderationItem 排除第一个 Item 之后剩余的信息
+   - offer 开头的是上面 offerItem 的信息
+   - basicOrderType 是需要转换的，[可以参考](https://github.com/cryptochou/seaport-analysis)
+   - 签名是上面挂单用户的签名
+   - 其他信息可以照搬下来
 
 ```rust
     function fulfillBasicOrder_efficient_6GL6yc(
@@ -213,17 +92,17 @@
     }
 ```
 
-
-## Event事件
+## Event 事件
 
 主要涉及到下面两个, [链接](https://goerli.etherscan.io/tx/0x9acd4ccb2337223b159f8668914269447fd88136951bef40a21c0fac5c8b1226#eventlog)
+
 - `OrderFulfilled (bytes32 orderHash, index address offerer, index address zone, address recipient, tuple[] offer, tuple[] consideration)`
 - `Transfer (index address from, index address to, uint256 tokens)`
 
 ## 总结
 
-1. 首先用户想要出售NFT，调用opensea后端构造买单数据，进行签名，之后将签名数据回传到opensea后端；
-2. 买家要买NFT的时候，直接构造fulfillBasicOrder_efficient_6GL6yc交易，填充交易参数BasicOrderParameters；同样的这些数据是opensea后端构造好的
+1. 首先用户想要出售 NFT，调用 opensea 后端构造买单数据，进行签名，之后将签名数据回传到 opensea 后端；
+2. 买家要买 NFT 的时候，直接构造 fulfillBasicOrder_efficient_6GL6yc 交易，填充交易参数 BasicOrderParameters；同样的这些数据是 opensea 后端构造好的
 3. 买家签名交易信息，发送到链上
 
-注意：这里面只有卖家对订单进行了签名，而买家只对交易签名; seaport合约会恢复出卖家的订单，并验证签名；
+注意：这里面只有卖家对订单进行了签名，而买家只对交易签名; seaport 合约会恢复出卖家的订单，并验证签名；
