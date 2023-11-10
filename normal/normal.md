@@ -101,7 +101,7 @@
 
 ## 总结
 
-1. 首先用户想要出售 NFT，调用 opensea 后端构造买单数据，进行签名，之后将签名数据回传到 opensea 后端；
+1. 首先用户想要出售 NFT，调用 opensea 后端构造卖单数据，进行签名，之后将签名数据回传到 opensea 后端；
 2. 买家要买 NFT 的时候，直接构造 fulfillBasicOrder_efficient_6GL6yc 交易，填充交易参数 BasicOrderParameters；同样的这些数据是 opensea 后端构造好的
 3. 买家签名交易信息，发送到链上
 
