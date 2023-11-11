@@ -134,6 +134,11 @@
 
 ## 普通交易模式
 
-场景：拥有拥有 721NFT，想要出售这个 NFT 换取 ETH
+场景：拥有721NFT，想要出售这个 NFT 换取 ETH
 
-链接：[normal](normal/normal.md)
+链接：[普通交易](normal/normal.md)
+
+## 指定买家模式
+
+场景：拥有NFT，想要出售，并且指定了具体的买家
+链接：[指定买家](normal/private.md)
