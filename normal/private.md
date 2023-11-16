@@ -179,58 +179,60 @@
        1	.signature	bytes	0x
    ```
 
-4.fulfillment 参数的构建，fulfillment是对订单以及订单中Offer和Consideration的索引，所以我们可以看到一个FulFillment包含offerComponents和considerationComponents两个属性；
-- 我们拆解一下FulfillmentComponent参数
-    - orderIndex：表示再Orders中的索引，从0开始；
-    - itemIndex：表示在Offer列表或者Consideration列表中的索引，从0开始； 
-- 手工画了一个图帮助理解 [img](fulfillment.jpg)
+4.fulfillment 参数的构建，fulfillment 是对订单以及订单中 Offer 和 Consideration 的索引，所以我们可以看到一个 FulFillment 包含 offerComponents 和 considerationComponents 两个属性；
 
-    ```RUST
-        Fulfillment[] calldata fulfillments = [
-            struct Fulfillment {
-                FulfillmentComponent[] offerComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 0
-                        uint256 itemIndex;  // 0
-                    }
-                }
-                FulfillmentComponent[] considerationComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 0
-                        uint256 itemIndex;  // 2
-                    }
-                }
-            },
-            struct Fulfillment {
-                FulfillmentComponent[] offerComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 1
-                        uint256 itemIndex;  // 0
-                    }
-                }
-                FulfillmentComponent[] considerationComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 0
-                        uint256 itemIndex;  // 0
-                    }
-                }
-            },
-            struct Fulfillment {
-                FulfillmentComponent[] offerComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 1
-                        uint256 itemIndex;  // 0
-                    }
-                }
-                FulfillmentComponent[] considerationComponents{
-                    struct FulfillmentComponent {
-                        uint256 orderIndex; // 0
-                        uint256 itemIndex;  // 1
-                    }
-                }
-            },
-        ]
-    ```
+- 我们拆解一下 FulfillmentComponent 参数
+  - orderIndex：表示再 Orders 中的索引，从 0 开始；
+  - itemIndex：表示在 Offer 列表或者 Consideration 列表中的索引，从 0 开始；
+- 手工画了一个图帮助理解 [img](fulfillment.jpg)
+- goland 实现的代码可以查看`BuildFulfillments`函数
+
+  ```RUST
+      Fulfillment[] calldata fulfillments = [
+          struct Fulfillment {
+              FulfillmentComponent[] offerComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 0
+                      uint256 itemIndex;  // 0
+                  }
+              }
+              FulfillmentComponent[] considerationComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 0
+                      uint256 itemIndex;  // 2
+                  }
+              }
+          },
+          struct Fulfillment {
+              FulfillmentComponent[] offerComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 1
+                      uint256 itemIndex;  // 0
+                  }
+              }
+              FulfillmentComponent[] considerationComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 0
+                      uint256 itemIndex;  // 0
+                  }
+              }
+          },
+          struct Fulfillment {
+              FulfillmentComponent[] offerComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 1
+                      uint256 itemIndex;  // 0
+                  }
+              }
+              FulfillmentComponent[] considerationComponents{
+                  struct FulfillmentComponent {
+                      uint256 orderIndex; // 0
+                      uint256 itemIndex;  // 1
+                  }
+              }
+          },
+      ]
+  ```
 
 ## Event 事件
 
