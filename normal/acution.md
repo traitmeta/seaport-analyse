@@ -97,7 +97,10 @@
 
 1. 使用 matchAdvancedOrders函数进行撮合交易
 2. 参数解析；
-   - AdvancedOrder 是订单列表，也就是上面两个订单
+   - AdvancedOrder 是订单列表，也就是上面两个订单 + advance数据
+      1. numerator和denominator表示分子分母，这里是721，只有一个NFT，所有 1 / 1 = 1；
+      2. signature 是订单的签名数据
+      3. extraData： 
    - CriteriaResolver： 这里没用到暂时填写空数组
    - Fulfillment： 我们在介绍指定用户购买的交易中介绍过
    - address：指定recipent，主要是seaport不会主动帮助拍卖单子撮合，最后还是要用户接受报价单；所以两边会有差价，差价是要给这个地址。

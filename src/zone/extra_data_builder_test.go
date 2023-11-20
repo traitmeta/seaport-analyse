@@ -34,7 +34,7 @@ func TestAdvancedExtra_toPaddedBytes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			b := &AdvancedExtraBuilder{
+			b := &ExtraDataBuilder{
 				contract: tt.fields.contract,
 				chainId:  tt.fields.chainId,
 			}
@@ -123,7 +123,7 @@ func TestAdvancedExtra_GetZoneContext(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			b := &AdvancedExtraBuilder{
+			b := &ExtraDataBuilder{
 				contract:  tt.fields.contract,
 				chainId:   tt.fields.chainId,
 				fulfiller: tt.fields.fulfiller,
@@ -173,7 +173,7 @@ func TestAdvancedExtra_getExtraData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			b := &AdvancedExtraBuilder{
+			b := &ExtraDataBuilder{
 				contract:  tt.fields.contract,
 				chainId:   tt.fields.chainId,
 				fulfiller: tt.fields.fulfiller,
@@ -229,7 +229,7 @@ func TestAdvancedExtra_convertSignatureToEIP2098(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			b := &AdvancedExtraBuilder{
+			b := &ExtraDataBuilder{
 				contract: tt.fields.contract,
 				chainId:  tt.fields.chainId,
 			}

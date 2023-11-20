@@ -15,28 +15,33 @@ import (
 	"github.com/traitmeta/seaport-analyse/src/utils"
 )
 
-const SignedZoneExpirationSeconds = 60
+var ZoneActivedSignerPK string
+var ZoneExtraDataBuilder *ExtraDataBuilder
 
-type AdvancedExtraBuilder struct {
+func Init(fulfiller, chainId, contract string) {
+	ZoneExtraDataBuilder = NewAdvancedExtraBuilder(fulfiller, chainId, contract)
+}
+
+type ExtraDataBuilder struct {
 	contract  string
 	chainId   string
 	fulfiller string
 }
 
-func NewAdvancedExtraBuilder(fulfiller, chainId, contract string) *AdvancedExtraBuilder {
-	return &AdvancedExtraBuilder{
+func NewAdvancedExtraBuilder(fulfiller, chainId, contract string) *ExtraDataBuilder {
+	return &ExtraDataBuilder{
 		contract:  contract,
 		chainId:   chainId,
 		fulfiller: fulfiller,
 	}
 }
 
-func (b *AdvancedExtraBuilder) BuildExtraData(priv, orderHash, context string) (string, error) {
-	expiration := time.Now().Unix() + int64(SignedZoneExpirationSeconds)
+func (b *ExtraDataBuilder) BuildExtraData(priv, orderHash, context string) (string, error) {
+	expiration := time.Now().Unix() + int64(utils.SignedZoneExpirationSeconds)
 	return b.buildExtraData(priv, orderHash, context, expiration)
 }
 
-func (b *AdvancedExtraBuilder) buildExtraData(priv, orderHash, context string, expiration int64) (string, error) {
+func (b *ExtraDataBuilder) buildExtraData(priv, orderHash, context string, expiration int64) (string, error) {
 	signaData := b.buildSignData(orderHash, context, expiration)
 	signature, err := b.SignForZone(priv, signaData)
 	if err != nil {
@@ -49,7 +54,7 @@ func (b *AdvancedExtraBuilder) buildExtraData(priv, orderHash, context string, e
 	return extraData, nil
 }
 
-func (b *AdvancedExtraBuilder) convertSignatureToEIP2098(signature string) string {
+func (b *ExtraDataBuilder) convertSignatureToEIP2098(signature string) string {
 	if len(signature) == 130 {
 		return signature
 	}
@@ -78,14 +83,14 @@ func (b *AdvancedExtraBuilder) convertSignatureToEIP2098(signature string) strin
 	return hexutil.Encode(compactSignature)
 }
 
-func (b *AdvancedExtraBuilder) toPaddedBytes(value uint64, numBytes int) string {
+func (b *ExtraDataBuilder) toPaddedBytes(value uint64, numBytes int) string {
 	hexVal := hexutil.EncodeUint64(value)
 	valueBytes := common.LeftPadBytes(hexutil.MustDecode(hexVal), numBytes)
 
 	return hexutil.Encode(valueBytes)[2 : numBytes*2+2]
 }
 
-func (b *AdvancedExtraBuilder) BuildZoneContext(considerFirstItemIdentifier string) (string, bool) {
+func (b *ExtraDataBuilder) BuildZoneContext(considerFirstItemIdentifier string) (string, bool) {
 	var valueBytes []byte
 	s := considerFirstItemIdentifier
 	if len(s) >= 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X') {
@@ -101,7 +106,7 @@ func (b *AdvancedExtraBuilder) BuildZoneContext(considerFirstItemIdentifier stri
 	return "0x00" + hexutil.Encode(valueBytes)[2:32*2+2], true
 }
 
-func (b *AdvancedExtraBuilder) buildSignData(orderHash, context string, expiration int64) string {
+func (b *ExtraDataBuilder) buildSignData(orderHash, context string, expiration int64) string {
 	// contract is signedZone contract address
 	// fulfiller is activedSigner for signedZone contract
 	// orderHash is order hash
@@ -140,7 +145,7 @@ func (b *AdvancedExtraBuilder) buildSignData(orderHash, context string, expirati
 	return fmt.Sprintf(signFormat, b.chainId, b.contract, b.fulfiller, expiration, orderHash, context)
 }
 
-func (b *AdvancedExtraBuilder) SignForZone(priv string, signData string) (signature string, err error) {
+func (b *ExtraDataBuilder) SignForZone(priv string, signData string) (signature string, err error) {
 	var td apitypes.TypedData
 	if err = json.Unmarshal([]byte(signData), &td); err != nil {
 		return "", err
