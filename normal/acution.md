@@ -95,15 +95,15 @@
 
 ## 用户购买 NFT 的时候调用的合约方法
 
-1. 使用 matchAdvancedOrders函数进行撮合交易
+1. 使用 matchAdvancedOrders 函数进行撮合交易
 2. 参数解析；
-   - AdvancedOrder 是订单列表，也就是上面两个订单 + advance数据
-      1. numerator和denominator表示分子分母，这里是721，只有一个NFT，所有 1 / 1 = 1；
-      2. signature 是订单的签名数据
-      3. extraData： 
+   - AdvancedOrder 是订单列表，也就是上面两个订单 + advance 数据; [参考代码](../src/order/advanced_order.go)
+     1. numerator 和 denominator 表示分子分母，这里是 721，只有一个 NFT，所有 1 / 1 = 1；
+     2. signature 是订单的签名数据
+     3. extraData： [参考代码](../src/zone/extra_data_builder.go)
    - CriteriaResolver： 这里没用到暂时填写空数组
    - Fulfillment： 我们在介绍指定用户购买的交易中介绍过
-   - address：指定recipent，主要是seaport不会主动帮助拍卖单子撮合，最后还是要用户接受报价单；所以两边会有差价，差价是要给这个地址。
+   - address：指定 recipent，主要是 seaport 不会主动帮助拍卖单子撮合，最后还是要用户接受报价单；所以两边会有差价，差价是要给这个地址。
 
 ```javascript
     function matchAdvancedOrders(
@@ -165,6 +165,4 @@
 
 ## Event 事件
 
-
 ## 总结
-
