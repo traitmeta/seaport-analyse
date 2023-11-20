@@ -17,9 +17,6 @@ import (
 
 const SignedZoneExpirationSeconds = 60
 
-var BizAdvancedExtra *AdvancedExtraBuilder
-
-// BestOrderBiz Asset's best ask/bid 相关 biz
 type AdvancedExtraBuilder struct {
 	contract  string
 	chainId   string
@@ -104,11 +101,11 @@ func (b *AdvancedExtraBuilder) BuildZoneContext(considerFirstItemIdentifier stri
 	return "0x00" + hexutil.Encode(valueBytes)[2:32*2+2], true
 }
 
-// contract is signedZone contract address
-// fulfiller is activedSigner for signedZone contract
-// orderHash is order hash
-// context is extend of first consideration identify
 func (b *AdvancedExtraBuilder) buildSignData(orderHash, context string, expiration int64) string {
+	// contract is signedZone contract address
+	// fulfiller is activedSigner for signedZone contract
+	// orderHash is order hash
+	// context is extend of first consideration identify
 	var signFormat = `
 	{
 		"types": {
