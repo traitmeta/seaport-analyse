@@ -185,7 +185,7 @@
   - orderIndex：表示再 Orders 中的索引，从 0 开始；
   - itemIndex：表示在 Offer 列表或者 Consideration 列表中的索引，从 0 开始；
 - 手工画了一个图帮助理解 [img](fulfillment.jpg)
-- goland 实现的代码可以查看`BuildFulfillments`函数
+- goland 实现的代码可以查看[code](../src/order/fufillerment.go) -> `BuildFulfillments`函数
 
   ```RUST
       Fulfillment[] calldata fulfillments = [
